@@ -6,7 +6,6 @@ from iso8601 import parse_date
 from pytz import timezone
 import os
 import urllib
-import json
 
 
 def convert_time(date):
@@ -55,11 +54,11 @@ def convert_string_from_dict_tirex(string):
         u'прав вимоги за кредитами': u'dgfFinancialAssets',
         u'майна банків': u'dgfOtherAssets',
         u'очікується протокол': u'pending.verification',
-        u'очікується кінець кваліфікації': u'pending.waiting',
+        u'на черзі': u'pending.waiting',
         u'очікується підписання договору': u'pending.payment',
         u'переможець': u'active',
-        u'рiшення скасованно': u'cancelled',
-        u'дисквалiфiковано': u'unsuccessful',
+        u'рiшення скасовано': u'cancelled',
+        u'дискваліфіковано': u'unsuccessful',
     }.get(string, string)
 
 
@@ -101,9 +100,3 @@ def get_upload_file_path():
 
 def tirex_download_file(url, file_name, output_dir):
     urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
-
-
-def get_award_amount(internal_id, award_index):
-    r = urllib.urlopen('https://lb.api-sandbox.ea.openprocurement.org/api/2.4/auctions/{}'.format(internal_id)).read()
-    auction = json.loads(r)
-    return auction['data']['awards'][int(award_index)]["value"]['amount']
